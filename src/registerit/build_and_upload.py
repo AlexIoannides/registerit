@@ -4,9 +4,10 @@ directory and upload it to PyPI, so that the package name can be
 registered as belonging to the author (while they develope the
 codebase).
 """
+import re
 from pathlib import Path
 from shutil import move, rmtree
-from subprocess import CalledProcessError, run
+from subprocess import CalledProcessError, DEVNULL, run
 from tempfile import mkdtemp
 
 
@@ -81,7 +82,10 @@ def build_minimal_python_distribution(
     readme_path.write_text(_render_minimal_readme_file())
 
     try:
-        run(['python3', 'setup.py', 'sdist'], cwd=temp_dir_path, check=True)
+        run(['python3', 'setup.py', 'sdist'],
+            stdout=DEVNULL,
+            cwd=temp_dir_path,
+            check=True)
         move(str(temp_dir_path / 'dist'), str(cwd))
         dist_dir = cwd / 'dist'
         dist = list(dist_dir.glob('*.tar.gz'))[0]
@@ -104,12 +108,27 @@ def upload_distribution_to_pypi(
     :param password: PyPI passwork.
     """
     try:
-        run(
-            ['twine', 'upload', str(distribution), '-u', username, '-p', password],
+        run(['twine', 'upload', str(distribution), '-u', username, '-p', password,
+             '--verbose'],
             check=True,
-            capture_output=True
-        )
-    except CalledProcessError:
-        raise RuntimeError('cannot upload skeleton Python distribution to PyPI.')
+            capture_output=True,
+            encoding='utf-8')
+    except CalledProcessError as e:
+        error_msg = e.stdout
+        if re.findall('403', error_msg):
+            if re.findall('#project-name', error_msg):
+                msg = 'this package name is already taken.'
+            elif re.findall('#invalid-auth', error_msg):
+                msg = 'invalid credentials.'
+            else:
+                msg = error_msg
+        elif re.findall('400', error_msg):
+            if re.findall('#file-name-reuse', error_msg):
+                msg = 'you have already registered this package name.'
+            else:
+                msg = error_msg
+        else:
+            msg = error_msg
+        raise RuntimeError(msg)
     finally:
         rmtree(distribution.parent)
