@@ -1,5 +1,5 @@
 """
-TODO
+Command Line Interface (CLI) for registerit.
 """
 import click
 
@@ -24,5 +24,14 @@ def cli(
     email: str,
     url: str
 ) -> None:
+    """[summary]
+
+    :param package_name: The name of the package to be registered.
+    :param username: PyPI username.
+    :param password: PyPI passwork.
+    :param author: Name of package author.
+    :param email: E-mail address of package author.
+    :param url: URL for package (website or repo).
+    """
     minimal_dist = build_minimal_python_distribution(package_name, author, email, url)
     upload_distribution_to_pypi(minimal_dist, username, password)
