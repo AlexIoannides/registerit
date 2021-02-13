@@ -44,18 +44,18 @@ jobs:
       - run: 
           name: Check that VERSION has been bumped
           command: |
-            if [ ${CIRCLE_BRANCH} != "master" ]; then
-              git clone --depth 1 --single-branch $CIRCLE_REPOSITORY_URL master-clone
-              export VERSION_MASTER=$(cat master-clone/VERSION)
+            if [ ${CIRCLE_BRANCH} != "main" ]; then
+              git clone --depth 1 --single-branch $CIRCLE_REPOSITORY_URL main-clone
+              export VERSION_main=$(cat main-clone/VERSION)
               export VERSION_BRANCH=$(cat VERSION)
-              if [ $VERSION_BRANCH == $VERSION_MASTER ]; then
-                echo "Version on branch '${CIRCLE_BRANCH}' (v${VERSION_BRANCH}) is the same as on 'master' - please bump version in VERSION file."
+              if [ $VERSION_BRANCH == $VERSION_main ]; then
+                echo "Version on branch '${CIRCLE_BRANCH}' (v${VERSION_BRANCH}) is the same as on 'main' - please bump version in VERSION file."
                 exit 1
               else
                 echo "Branch '${CIRCLE_BRANCH}' (v${VERSION_BRANCH}) has passed all tests and can be merged."
               fi
             else
-              echo "Merging into master branch."
+              echo "Merging into main branch."
             fi
 workflows:
   version: 2
@@ -69,6 +69,8 @@ workflows:
             branches:
               ignore: main
       - build-python-package-push-to-pypi:
+          requires:
+            - ensure-package-version-number-incremented
           filters:
             branches:
               only: main
