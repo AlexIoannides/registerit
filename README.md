@@ -15,7 +15,7 @@
 * Thought of a great name?
 * Register it on PyPI, before someone else does!
 
-This simple CLI tool creates a minimal Python package with your chosen name and then uploads it to PyPI, thereby registering it for you.
+A tool that creates a minimal Python package with your chosen name and uploads it to PyPI, registering it for you.
 
 ## Install
 
