@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  aws-eks: circleci/aws-eks@1.0.0
 jobs:
   run-unit-and-functional-tests-and-static-code-analysis:
     docker: 
