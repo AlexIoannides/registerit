@@ -69,8 +69,6 @@ workflows:
             branches:
               ignore: master
       - build-python-package-push-to-pypi:
-          requires:
-            - ensure-package-version-number-incremented
           filters:
             branches:
               only: master
