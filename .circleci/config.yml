@@ -67,14 +67,14 @@ workflows:
             - ensure-package-version-number-incremented
           filters:
             branches:
-              ignore: master
+              ignore: main
       - build-python-package-push-to-pypi:
           filters:
             branches:
-              only: master
+              only: main
       - create-and-push-new-git-tag:
           requires:
             - build-python-package-push-to-pypi
           filters:
             branches:
-              only: master
+              only: main
