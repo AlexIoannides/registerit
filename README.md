@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://dev-project-media.s3.eu-west-2.amazonaws.com/registerit-logo.png"/>
+<img src="https://dev-project-media.s3.eu-west-2.amazonaws.com/registerit-logo-small.png"/>
 </div>
 
 <div align="center">
