@@ -99,7 +99,8 @@ def build_minimal_python_distribution(
 def upload_distribution_to_pypi(
     distribution: Path,
     username: str,
-    password: str
+    password: str,
+    repository_url: str
 ) -> None:
     """Upload a source distribution to PyPI.
 
@@ -109,7 +110,7 @@ def upload_distribution_to_pypi(
     """
     try:
         run(['twine', 'upload', str(distribution), '-u', username, '-p', password,
-             '--verbose'],
+             '--repository-url', repository_url, '--verbose'],
             check=True,
             capture_output=True,
             encoding='utf-8')
